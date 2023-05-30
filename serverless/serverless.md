@@ -1,6 +1,6 @@
 Install serverless manager:
 ```
-kubectl apply -f https://github.com/kyma-project/serverless-manager/releases/latest/download/serverless-manager.yaml
+kubectl apply -f https://github.com/pbochynski/serverless-manager/releases/latest/download/serverless-manager.yaml
 ```{{exec}}
 
 And create serverless instance:
