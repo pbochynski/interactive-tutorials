@@ -1,3 +1,8 @@
+Create kyma-system namespace:
+```
+kubectl create ns kyma-system
+```{{exec}}
+
 Install serverless manager:
 ```
 kubectl apply -f https://github.com/kyma-project/serverless-manager/releases/latest/download/serverless-manager.yaml
@@ -12,7 +17,7 @@ metadata:
   name: serverless-sample
 spec:
   dockerRegistry:
-    secretName: my-secret
+    enableInternal: true
 EOF
 ```{{exec}}
 
