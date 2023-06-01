@@ -6,10 +6,6 @@
   "details": {
     "steps": [
       {
-        "title": "Configure container registry",
-        "text": "registry.md"
-      },
-      {
         "title": "Install serverless",
         "text": "serverless.md"
       },
