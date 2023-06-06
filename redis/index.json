@@ -1,0 +1,28 @@
+{
+  "title": "Redis",
+  "description": "Use redis as a storage",
+  "difficulty": "Beginner",
+  "time": "5",
+  "details": {
+    "steps": [
+      {
+        "title": "Redis Operator",
+        "text": "redis.md",
+      },
+      {
+        "title": "kubeconfig for Kyma Dashboard",
+        "text": "setup-access.md"
+      }
+    ],
+    "intro": {
+      "text": "intro.md",
+      "code": "init.sh"
+    }
+  },
+  "environment": {
+    "uilayout": "terminal"
+  },
+  "backend": {
+    "imageid": "kubernetes-kubeadm-2nodes"
+  }
+}

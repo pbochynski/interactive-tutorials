@@ -1,0 +1,7 @@
+{
+  "name": "redis-test",
+  "version": "0.0.1",
+  "dependencies": {
+    "redis": "^4.6.7"
+  }
+}
