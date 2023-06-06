@@ -6,8 +6,8 @@
   "details": {
     "steps": [
       {
-        "title": "Install serverless",
-        "text": "serverless.md"
+        "title": "Rate limit",
+        "text": "rate-limit.md"
       },
       {
         "title": "kubeconfig for Kyma Dashboard",
