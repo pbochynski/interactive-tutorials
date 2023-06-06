@@ -16,9 +16,10 @@ kubectl apply -f rate-limit-filters.yaml
 Port forward for ingress gateway: 
 ```
 kubectl port-forward --address=0.0.0.0 -n istio-system svc/istio-ingressgateway 5000:80 &
+
 ```{{exec}}
 
 Try this one several times until you get 429 response code:
 ```
-curl https://localhost:5000/headers -iv
+curl http://localhost:5000/headers -iv
 ```{{exec}}
