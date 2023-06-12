@@ -1,18 +1,18 @@
-Suppose that the `cluster-ip` module has a new feature that needs to be tested before it can be released to production. 
+Let's suppose that the `cluster-ip` module has a new feature that needs to be tested before it can be released to production. 
 
-To do this, a new module template can be created with the specific version of the cluster-ip module under the beta channel.
+To do this, a new ModuleTemplate custom resource (CR) must be created with the specific version of the `cluster-ip` module in the `beta` channel.
 
-To apply this new module template, run the following kubectl command:
+To apply this new ModuleTemplate CR, run the following kubectl command:
 ```
 kubectl apply -f cluster-ip-module-template-beta.yaml
 ```{{exec}}
 
-Check `cluster-ip` module, make sure it enabled under `fast` channel, and the current version is `v0.0.24`. 
+Check the status of the existing `cluster-ip` module. Make sure it is enabled in the `fast` channel, and that its current version is `v0.0.24`. 
 ```
 kyma alpha list module -k default-kyma
 ```{{exec}}
 
-Now switch the `cluster-ip` module to the `beta` channel by running the following command:
+Now switch the `cluster-ip` module to the `beta` channel. Run the following command:
 ```
 kyma alpha enable module cluster-ip --channel beta -k default-kyma
 ```{{exec}}
