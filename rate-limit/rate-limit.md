@@ -22,7 +22,12 @@ kubectl apply -f rate-limit-service.yaml
 kubectl apply -f rate-limit-filters.yaml
 ```{{exec}}
 
-Wait a little bit until rate limit service is up and running. And then try to reach the limit for different tenants (repeat the curl command until you get 429 response code).
+Wait a little bit until rate limit service is up and running.
+```
+kubectl wait --for condition=Available  deployment/ratelimit
+```{{exec}}
+
+Now you can try to reach the limit for different tenants. Repeat the curl commands below until you get 429 response code. Check the configuration in the `rate-limit-config.yaml`.
 
 Tenant `foo` (3 req/minute):
 ```
