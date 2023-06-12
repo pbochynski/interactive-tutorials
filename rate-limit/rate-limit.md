@@ -2,6 +2,7 @@ Install httpbin service in the default namespace with istio enabled:
 ```
 kubectl label namespace default istio-injection=enabled
 kubectl apply -f httpbin.yaml 
+kubectl wait --for condition=Available  deployment/httpbin
 ```{{exec}}
 
 Forward `istio-ingressgateway` to port 5000:
@@ -20,10 +21,6 @@ Configure and deploy rate limit service (you can switch to editor tab, navigate 
 kubectl apply -f rate-limit-config.yaml
 kubectl apply -f rate-limit-service.yaml
 kubectl apply -f rate-limit-filters.yaml
-```{{exec}}
-
-Wait a little bit until rate limit service is up and running.
-```
 kubectl wait --for condition=Available  deployment/ratelimit
 ```{{exec}}
 
