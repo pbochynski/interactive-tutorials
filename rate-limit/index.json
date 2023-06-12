@@ -8,10 +8,6 @@
       {
         "title": "Rate limit",
         "text": "rate-limit.md"
-      },
-      {
-        "title": "kubeconfig for Kyma Dashboard",
-        "text": "setup-access.md"
       }
     ],
     "assets": {
