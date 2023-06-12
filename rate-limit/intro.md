@@ -1,2 +1,2 @@
 In this tutorial you will learn how to enable rate limit for your service based on custom header.
-As a prerequisite you need a kubernetes cluster with istio installed and a sample service. The cluster is already up and now you can see istio being installed and httpbin as sample service. When you see the message that prerequisites are installed you can move to the next page.
+As a prerequisite you need a kubernetes cluster with Istio installed. The cluster is already up and now you can see Istio being installed. You can move to the next step when you see `Installation complete` message in the terminal window.
