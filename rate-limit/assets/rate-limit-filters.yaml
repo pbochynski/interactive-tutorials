@@ -62,5 +62,5 @@ spec:
           rate_limits:
             - actions: # any actions in here
               - request_headers:
-                  header_name: ":path"
-                  descriptor_key: "PATH"
+                  header_name: "tenant"
+                  descriptor_key: "tenant"
