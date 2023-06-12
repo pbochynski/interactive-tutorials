@@ -61,8 +61,12 @@ spec:
       skywalking:
         port: 11800
         service: tracing.istio-system.svc.cluster.local
+    - name: otel-tracing
+      opentelemetry:
+        port: 4317
+        service: opentelemetry-collector.otel-collector.svc.cluster.local
   profile: demo
-  tag: 1.17.2
+  tag: 1.18.0
   values:
     base:
       enableCRDTemplates: false
@@ -147,13 +151,6 @@ spec:
         tracer: zipkin
       proxy_init:
         image: proxyv2
-        resources:
-          limits:
-            cpu: 2000m
-            memory: 1024Mi
-          requests:
-            cpu: 10m
-            memory: 10Mi
       sds:
         token:
           aud: istio-ca
