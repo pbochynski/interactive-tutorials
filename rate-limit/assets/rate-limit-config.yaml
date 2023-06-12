@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ratelimit-config
+data:
+  config.yaml: |
+    domain: headers-ratelimit
+    descriptors:
+      - key: tenant
+        value: "vip"
+        rate_limit:
+          unit: minute
+          requests_per_unit: 10
+      - key: tenant
+        value: "demo"
+        rate_limit:
+          unlimited: true
+      - key: tenant
+        rate_limit:
+          unit: minute
+          requests_per_unit: 3

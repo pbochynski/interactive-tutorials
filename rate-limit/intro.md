@@ -1,0 +1,2 @@
+In this tutorial you will learn how to enable rate limit for your service based on custom header.
+As a prerequisite you need a kubernetes cluster with Istio installed. The cluster is already up and now you can see Istio being installed. You can move to the next step when you see `Installation complete` message in the terminal window.

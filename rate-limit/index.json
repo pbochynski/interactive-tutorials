@@ -1,0 +1,29 @@
+{
+  "title": "Rate limit",
+  "description": "Rate limit your services based on custom header",
+  "difficulty": "Intermediate",
+  "time": "15",
+  "details": {
+    "steps": [
+      {
+        "title": "Rate limit",
+        "text": "rate-limit.md"
+      }
+    ],
+    "assets": {
+      "host01": [
+        {"file": "*.yaml", "target": "~/deployments/"}
+      ]
+    },
+    "intro": {
+      "text": "intro.md",
+      "code": "init.sh"
+    }
+  },
+  "environment": {
+    "uilayout": "terminal"
+  },
+  "backend": {
+    "imageid": "kubernetes-kubeadm-2nodes"
+  }
+}
