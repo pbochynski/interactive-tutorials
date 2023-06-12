@@ -31,7 +31,7 @@ curl -H "tenant: foo" http://localhost:5000/headers -iv
 
 Tenant `bar` (3 req/minute):
 ```
-curl -H "tenant: foo" http://localhost:5000/headers -iv
+curl -H "tenant: bar" http://localhost:5000/headers -iv
 ```{{exec}}
 
 Tenant `vip` (10 req/minute):
