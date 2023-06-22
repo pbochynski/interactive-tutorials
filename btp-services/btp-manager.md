@@ -1,6 +1,6 @@
 Install [BTP manager](https://github.com/kyma-project/btp-manager):
 ```
-kubectl apply -f deployments/btp-manager.yaml
+kubectl apply -f https://github.com/kyma-project/btp-manager/releases/latest/download/rendered.yaml
 ```{{exec}}
 
 Create BTPOperator custom resource
