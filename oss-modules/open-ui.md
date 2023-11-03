@@ -1,1 +1,1 @@
-Open this [link]({{TRAFFIC_HOST1_8001}})
+Open this [link]({{TRAFFIC_HOST1_8001}}/public)
