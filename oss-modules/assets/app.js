@@ -1,5 +1,6 @@
 var pods = []
 var deployment = ''
+
 modules = [
   {
     name: 'serverless',
@@ -18,7 +19,10 @@ function fetchDeployment() {
   url = URL_PREFIX + modules[0].operatorDeployment
   fetch(url).then((response) => response.text()).then((body) => {
     console.log(body)
-    deployment = body;
+    deployment = []
+    jsyaml.loadAll(body, (doc)=>{
+      deployment.push(doc)
+    });
     render()
   })
 
@@ -49,7 +53,7 @@ function renderPods() {
 }
 
 function renderDeployment() {
-  document.getElementById("deployment").innerHTML = deployment
+  document.getElementById("deployment").innerHTML = JSON.stringify(deployment,null,2)
 }
 
 function render() {
