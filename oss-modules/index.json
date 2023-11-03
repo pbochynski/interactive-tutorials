@@ -16,12 +16,12 @@
     ],
     "assets": {
       "host01": [
-        {"file": "*", "target": "~/public"}
+        {"file": "*", "target": "~/assets"}
       ]
     },
     "intro": {
       "text": "intro.md",
-      "foreground": "download-releases.sh"
+      "background": "assets/init.sh"
     }
   },
   "environment": {
