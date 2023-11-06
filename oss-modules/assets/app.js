@@ -39,6 +39,9 @@ var modules = [
   }
 ]
 
+function moduleState(m) {
+  
+}
 
 async function apply(res) {
   let path = await resPath(res)
@@ -116,7 +119,8 @@ function moduleCard(m) {
     deployment: <b>${m.deploymentYaml}</b><br/>
     operator resources: ${deploymentList(m)}<br/>
     cr: <b>${m.crYaml}</b><br/>
-    module configuration: ${m.cr.path} ${m.cr.status ? '(ok)' : '(not installed)'} <br/></small>`
+    module configuration: ${m.cr.path} ${m.cr.status ? '(created)' : '(not installed)'} <br/>
+    status: ${JSON.stringify(m.cr.status.status)}</small>`
 
   txt.innerHTML = html
   card.appendChild(txt)
@@ -149,7 +153,6 @@ async function loadModules() {
     m.cr = { resource: jsyaml.load(body) }
     let crPath = await resPath(m.cr.resource)
     m.cr.path = crPath
-    m.cr.status = await exists(crPath)
 
     for (let i of m.resources) {
       let path = await resPath(i.resource)
@@ -163,8 +166,12 @@ function checkStatus() {
   for (let m of modules) { 
     resPath(m.cr.resource).then((p)=>{
       m.cr.path = p
-      return exists(p)  
-    }).then((ok)=>m.cr.status=ok)
+      return fetch(p)  
+    }).then((res)=>res.json).then(
+      (cr)=>{
+        
+        m.cr.status=cr
+      })
 
     for (let r of m.resources) {
       if (r.path) {
