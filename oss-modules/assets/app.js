@@ -107,12 +107,7 @@ function moduleCard(m) {
   let installBtn = document.createElement("button")
   installBtn.textContent = "Install " + m.name
   installBtn.addEventListener("click", function (event) {
-    console.log(event)
-    setTimeout(() => {
-      installBtn.disabled = true;
-    }, 0)
     applyModule(m)
-    installBtn.disabled = false;
   })
   buttons.appendChild(installBtn)
   let card = document.createElement("div")
@@ -161,16 +156,16 @@ async function loadModules() {
     for (let i of m.resources) {
       let path = await resPath(i.resource)
       i.path = path
-      i.status = await exists(path)
-      if (i.resource.metadata.namespace && i.resource.metadata.namespace != 'default') {
-        let name = i.resource.metadata.namespace
-        let nsPath = `/api/v1/namespaces/${name}`
+      // i.status = await exists(path)
+      // if (i.resource.metadata.namespace && i.resource.metadata.namespace != 'default') {
+      //   let name = i.resource.metadata.namespace
+      //   let nsPath = `/api/v1/namespaces/${name}`
 
-        if (ns[name] == undefined) {
-          let nsOk = await exists(nsPath)
-          ns[name] = nsOk
-        }
-      }
+      //   if (ns[name] == undefined) {
+      //     let nsOk = await exists(nsPath)
+      //     ns[name] = nsOk
+      //   }
+      // }
     }
     m.namespaces = []
     for (let n of Object.keys(ns)) {
@@ -179,7 +174,18 @@ async function loadModules() {
       }
     }
   }
-  renderModules()
+  checkStatus()
+}
+
+function checkStatus() {
+  for (let m of modules) { 
+    for (let r of m.resources) {
+      if (r.path) {
+        exists(r.path).then((ok)=>{r.status=ok
+        renderModules()})
+      }
+    }
+  }
 }
 
 function getPods() {
