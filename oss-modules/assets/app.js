@@ -44,14 +44,11 @@ async function apply(res) {
 }
 
 async function applyModule(m) {
-  for (let r of m.namespaces) {
-    await apply(r.resource)
-  }
   for (let r of m.resources) {
     await apply(r.resource)
   }
   await apply(m.cr.resource)
-  loadModules()
+  checkStatus()
 }
 
 async function resPath(r) {
@@ -94,9 +91,6 @@ async function cacheAPI(apiVersion) {
 }
 function deploymentList(m) {
   let html = '<ul>'
-  for (let r of m.namespaces) {
-    html += `<li>${r.path} - ${r.status ? '(ok)' : '(not installed)'}</li>`
-  }
   for (let r of m.resources) {
     html += `<li>${r.path} ${r.status ? '(ok)' : '(not installed)'}</li>`
   }
@@ -152,26 +146,9 @@ async function loadModules() {
     m.cr.path = crPath
     m.cr.status = await exists(crPath)
 
-    let ns = {}
     for (let i of m.resources) {
       let path = await resPath(i.resource)
       i.path = path
-      // i.status = await exists(path)
-      // if (i.resource.metadata.namespace && i.resource.metadata.namespace != 'default') {
-      //   let name = i.resource.metadata.namespace
-      //   let nsPath = `/api/v1/namespaces/${name}`
-
-      //   if (ns[name] == undefined) {
-      //     let nsOk = await exists(nsPath)
-      //     ns[name] = nsOk
-      //   }
-      // }
-    }
-    m.namespaces = []
-    for (let n of Object.keys(ns)) {
-      if (!m.resources.some((i) => i.path == `/api/v1/namespaces/${n}`)) {
-        m.namespaces.push({ resource: { apiVersion: 'v1', kind: 'Namespace', metadata: { name: n } }, path: `/api/v1/namespaces/${n}`, status: ns[n] })
-      }
     }
   }
   checkStatus()
@@ -179,6 +156,11 @@ async function loadModules() {
 
 function checkStatus() {
   for (let m of modules) { 
+    resPath(m.cr.resource).then((p)=>{
+      m.cr.path = p
+      return exists(p)  
+    }).then((ok)=>m.cr.status=ok)
+
     for (let r of m.resources) {
       if (r.path) {
         exists(r.path).then((ok)=>{r.status=ok
