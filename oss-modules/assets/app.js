@@ -8,6 +8,11 @@ var modules = [
     crYaml: 'istio-default-cr.yaml'
   },
   {
+    name: 'api-gateway',
+    deploymentYaml: 'api-gateway-manager.yaml',
+    crYaml: 'apigateway-default-cr.yaml'
+  },
+  {
     name: 'serverless',
     deploymentYaml: 'serverless-operator.yaml',
     crYaml: 'default-serverless-cr.yaml'
