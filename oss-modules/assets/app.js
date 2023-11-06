@@ -11,6 +11,26 @@ var modules = [
     name: 'serverless',
     deploymentYaml: 'serverless-operator.yaml',
     crYaml: 'default-serverless-cr.yaml'
+  },
+  {
+    name: 'btp-operator',
+    deploymentYaml: 'btp-manager.yaml',
+    crYaml: 'btp-operator-default-cr.yaml'
+  },
+  {
+    name: 'telemetry',
+    deploymentYaml: 'telemetry-manager.yaml',
+    crYaml: 'telemetry-default-cr.yaml'
+  },
+  {
+    name: 'nats',
+    deploymentYaml: 'nats-manager.yaml',
+    crYaml: 'nats_default_cr.yaml'
+  },
+  {
+    name: 'keda',
+    deploymentYaml: 'keda-manager.yaml',
+    crYaml: 'keda-default-cr.yaml'
   }
 ]
 
@@ -36,13 +56,20 @@ async function applyModule(m) {
 
 async function resPath(r) {
   let url = (r.apiVersion === 'v1') ? '/api/v1' : `/apis/${r.apiVersion}`
-  let response = await apis(r.apiVersion)
-  let resource = response.resources.find((res) => res.kind == r.kind)
+  let api = groupVersions[r.apiVersion]
+  let resource = null
+  if (api) {
+    resource = api.resources.find((res) => res.kind == r.kind)
+  }
+  if (resource==null) {
+    api = await cacheAPI(r.apiVersion)
+    resource = api.resources.find((res) => res.kind == r.kind)  
+  }
   if (resource) {
     let ns = r.metadata.namespace || 'default'
     let nsPath = resource.namespaced ? `/namespaces/${ns}` : ''
-    return url + nsPath + `/${resource.name}/${r.metadata.name}`  
-  } 
+    return url + nsPath + `/${resource.name}/${r.metadata.name}`
+  }
   return null
 
 }
@@ -54,20 +81,16 @@ async function exists(path) {
   return (response.status == 200)
 }
 
-async function apis(apiVersion) {
-  if (groupVersions[apiVersion]) {
-    return groupVersions[apiVersion]
-  } else {
-    let url = (apiVersion === 'v1') ? '/api/v1' : `/apis/${apiVersion}`
-    let res = await fetch(url)
-    console.log("APIS response:", res.status)
-    if (res.status == 200) {
-      let body = await res.json()
-      groupVersions[apiVersion] = body
-      return body
-    }
-    return { resources: [] }
+async function cacheAPI(apiVersion) {
+  let url = (apiVersion === 'v1') ? '/api/v1' : `/apis/${apiVersion}`
+  let res = await fetch(url)
+  console.log("APIS response:", res.status)
+  if (res.status == 200) {
+    let body = await res.json()
+    groupVersions[apiVersion] = body
+    return body
   }
+  return { resources: [] }
 }
 function deploymentList(m) {
   let html = '<ul>'
@@ -85,7 +108,11 @@ function moduleCard(m) {
   installBtn.textContent = "Install " + m.name
   installBtn.addEventListener("click", function (event) {
     console.log(event)
+    setTimeout(() => {
+      installBtn.disabled = true;
+    }, 0)
     applyModule(m)
+    installBtn.disabled = false;
   })
   buttons.appendChild(installBtn)
   let card = document.createElement("div")
