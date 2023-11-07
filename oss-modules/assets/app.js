@@ -168,7 +168,7 @@ function moduleCard(m) {
   let html = `<h5>${m.name}</h5>
     <small>
     deployment: <b>${m.deploymentYaml}</b> ${resourcesBadge(m)}<br/>
-    cr: <b>${m.crYaml}</b> ${crBadge(m)}<br/></small>`
+    cr: <a href="${m.cr.path}"><b>${m.crYaml}</b></a> ${crBadge(m)}<br/></small>`
   txt.innerHTML = html
   cardBody.appendChild(txt)
   cardBody.appendChild(buttons)
@@ -209,6 +209,7 @@ async function loadModules() {
     response = await fetch(url)
     body = await response.text()
     m.cr = { resource: jsyaml.load(body) }
+    m.cr.resource.metadata.namespace='kyma-system'
     let crPath = await resPath(m.cr.resource)
     m.cr.path = crPath
 
