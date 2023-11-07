@@ -36,7 +36,14 @@ var modules = [
     name: 'keda',
     deploymentYaml: 'keda-manager.yaml',
     crYaml: 'keda-default-cr.yaml'
+  },
+  {
+    name: 'cap-operator',
+    deploymentYaml: 'cap-manager.yaml',
+    crYaml: 'cap-default-cr.yaml',
+    community: true
   }
+
 ]
 
 
@@ -53,7 +60,6 @@ async function applyModule(m) {
     await apply(r.resource)
   }
   await apply(m.cr.resource)
-  checkStatus()
 }
 
 async function resPath(r) {
@@ -63,9 +69,9 @@ async function resPath(r) {
   if (api) {
     resource = api.resources.find((res) => res.kind == r.kind)
   }
-  if (resource==null) {
+  if (resource == null) {
     api = await cacheAPI(r.apiVersion)
-    resource = api.resources.find((res) => res.kind == r.kind)  
+    resource = api.resources.find((res) => res.kind == r.kind)
   }
   if (resource) {
     let ns = r.metadata.namespace || 'default'
@@ -94,42 +100,98 @@ async function cacheAPI(apiVersion) {
   }
   return { resources: [] }
 }
+
 function deploymentList(m) {
-  let html = '<ul>'
-  for (let r of m.resources) {
-    html += `<li>${r.path} ${r.status ? '(ok)' : '(not installed)'}</li>`
+  let div = document.createElement("div")
+  if (m.details) {
+    let html = '<ul class="list-group">'
+    for (let r of m.resources) {
+      let badge = `<span class="badge bg-secondary"> - </span>`
+      if (r.status === true) {
+        badge = `<span class="badge bg-success">installed</span>`
+      } else if (r.status === false) {
+        badge = `<span class="badge bg-success">not applied</span>`        
+      }
+      html += `<li class="list-group-item">${r.path} ${badge}</li>`
+    }
+    div.innerHTML = html + '</ul>'
   }
-  return html + '</ul>'
+  return div
+}
+function resourcesBadge(m) {
+  let c = 0
+  for (let r of m.resources) {
+    if (r.status) {
+      c++
+    }
+  }
+  if (c == m.resources.length) {
+    return `<span class="badge bg-success">installed (${m.resources.length})</span>`
+  }
+  return `<span class="badge bg-secondary">(${c}/${m.resources.length})</span>`
+}
+function crBadge(m) {
+  if (m.cr.status) {
+    if (m.cr.value && m.cr.value.status && m.cr.value.status.state == "Ready") {
+      return `<span class="badge bg-success">Ready</span>`
+    }
+    if (m.cr.value && m.cr.value.status && m.cr.value.status.state) {
+      return `<span class="badge bg-warning text-dark">${m.cr.value.status.state}</span>`
+    }
+    return `<span class="badge bg-warning text-dark">applied</span>`
+  }
+  return `<span class="badge bg-secondary"> - </span>`
 }
 function moduleCard(m) {
   let buttons = document.createElement("div")
   let installBtn = document.createElement("button")
   installBtn.textContent = "Install " + m.name
+  installBtn.setAttribute('class', 'btn btn-outline-primary')
   installBtn.addEventListener("click", function (event) {
     applyModule(m)
+    checkStatus()
+  })
+  let detailsBtn = document.createElement("button")
+  detailsBtn.textContent = (m.details) ? "hide details" : "show details"
+  detailsBtn.setAttribute('class', 'btn btn-outline-primary')
+  detailsBtn.addEventListener("click", function (event) {
+    m.details = !m.details
+    renderModules()
   })
   buttons.appendChild(installBtn)
+  buttons.appendChild(detailsBtn)
   let card = document.createElement("div")
+  card.setAttribute('class', 'card')
+  let cardBody = document.createElement('div')
+  cardBody.setAttribute('class', 'card-body')
   let txt = document.createElement("div")
-  let html = `<hr><h3>${m.name}</h3>
+  let html = `<h5>${m.name}</h5>
     <small>
-    deployment: <b>${m.deploymentYaml}</b><br/>
-    operator resources: ${deploymentList(m)}<br/>
-    cr: <b>${m.crYaml}</b><br/>
-    module configuration: ${m.cr.path} ${m.cr.status ? '(ok)' : '(not installed)'} <br/></small>`
-
+    deployment: <b>${m.deploymentYaml}</b> ${resourcesBadge(m)}<br/>
+    cr: <b>${m.crYaml}</b> ${crBadge(m)}<br/></small>`
   txt.innerHTML = html
-  card.appendChild(txt)
-  card.appendChild(buttons)
+  cardBody.appendChild(txt)
+  cardBody.appendChild(buttons)
+  cardBody.appendChild(deploymentList(m))
+  card.appendChild(cardBody)
+  card.setAttribute('id', 'module-' + m.name)
   return card
 }
 
 
-function renderModules() {
-  let div = document.getElementById('modules');
-  div.innerHTML = ""
-  for (let m of modules) {
-    div.appendChild(moduleCard(m))
+function renderModules(m) {
+  if (m) {
+    let mDiv = document.getElementById('module-' + m.name)
+    if (mDiv) {
+      mDiv.parentNode.replaceChild(moduleCard(m), mDiv)
+    }
+  } else {
+    let div = document.getElementById('modules');
+    div.innerHTML = ""
+    for (let m of modules) {
+      div.appendChild(moduleCard(m))
+    }
+
   }
 }
 
@@ -155,20 +217,36 @@ async function loadModules() {
       i.path = path
     }
   }
+  renderModules()
   checkStatus()
 }
 
 function checkStatus() {
-  for (let m of modules) { 
-    resPath(m.cr.resource).then((p)=>{
+  for (let m of modules) {
+    resPath(m.cr.resource).then((p) => {
       m.cr.path = p
-      return exists(p)  
-    }).then((ok)=>m.cr.status=ok)
+      return fetch(p)
+    }).then((res) => {
+      m.cr.status = (res.status == 200)
+      return m.cr.status ? res.json() : null
+    }
+    ).then((body) => {
+      m.cr.value = body
+      renderModules(m)
+    })
 
     for (let r of m.resources) {
       if (r.path) {
-        exists(r.path).then((ok)=>{r.status=ok
-        renderModules()})
+        fetch(r.path).then((res) => {
+          if (res.status == 200) {
+            r.status = true
+            return res.json()
+          }
+          return null
+        }).then((json) => {
+          r.value = json
+          renderModules(m)
+        })
       }
     }
   }
@@ -197,5 +275,4 @@ function renderPods() {
   document.getElementById('pods').innerHTML = html
 
 }
-
 loadModules()

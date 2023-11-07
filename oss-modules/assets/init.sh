@@ -14,5 +14,8 @@ curl -L https://github.com/kyma-project/keda-manager/releases/latest/download/ke
 curl -L https://github.com/kyma-project/keda-manager/releases/latest/download/keda-default-cr.yaml -o assets/modules/keda-default-cr.yaml
 curl -L https://github.com/kyma-project/api-gateway/releases/latest/download/api-gateway-manager.yaml -o assets/modules/api-gateway-manager.yaml
 curl -L https://github.com/kyma-project/api-gateway/releases/latest/download/apigateway-default-cr.yaml -o assets/modules/apigateway-default-cr.yaml
+curl -L https://github.com/SAP/cap-operator-lifecycle/releases/download/manager%2Fv0.0.1/manager_manifest.yaml -o assets/modules/cap-manager.yaml
+curl -L https://github.com/SAP/cap-operator-lifecycle/releases/download/manager%2Fv0.0.1/manager_default_CR.yaml -o assets/modules/cap-default-cr.yaml
+
 kubectl create namespace kyma-system
 kubectl proxy -w='assets' -P='/assets/' --address='0.0.0.0' --accept-hosts='.*' &
