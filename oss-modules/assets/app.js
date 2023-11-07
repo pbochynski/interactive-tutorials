@@ -144,14 +144,14 @@ function crBadge(m) {
 function moduleCard(m) {
   let buttons = document.createElement("div")
   let installBtn = document.createElement("button")
-  installBtn.textContent = "install " + m.name
+  installBtn.textContent = "install"
   installBtn.setAttribute('class', 'btn btn-outline-primary')
   installBtn.addEventListener("click", function (event) {
     applyModule(m)
     setTimeout(()=>checkStatus(),3000)    
   })
   let detailsBtn = document.createElement("button")
-  detailsBtn.textContent = (m.details) ? "hide details" : "show details"
+  detailsBtn.textContent = (m.details) ? "hide details" : "details"
   detailsBtn.setAttribute('class', 'btn btn-outline-primary')
   detailsBtn.addEventListener("click", function (event) {
     m.details = !m.details
@@ -159,8 +159,10 @@ function moduleCard(m) {
   })
   buttons.appendChild(installBtn)
   buttons.appendChild(detailsBtn)
+  let col = document.createElement('div')
+  col.setAttribute('class','col mb-3')
   let card = document.createElement("div")
-  card.setAttribute('class', 'card')
+  card.setAttribute('class', 'card h-100')
   let cardBody = document.createElement('div')
   cardBody.setAttribute('class', 'card-body')
   let txt = document.createElement("div")  
@@ -174,7 +176,8 @@ function moduleCard(m) {
   cardBody.appendChild(deploymentList(m))
   card.appendChild(cardBody)
   card.setAttribute('id', 'module-' + m.name)
-  return card
+  col.appendChild(card)
+  return col
 }
 
 
