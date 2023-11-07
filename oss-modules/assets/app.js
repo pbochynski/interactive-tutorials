@@ -51,7 +51,6 @@ async function apply(res) {
   let path = await resPath(res)
   path += '?fieldManager=kubectl&fieldValidation=Strict&force=false'
   let response = await fetch(path, { method: 'PATCH', headers: { 'content-type': 'application/apply-patch+yaml' }, body: JSON.stringify(res) })
-  console.log(response.status)
   return response
 }
 
@@ -92,7 +91,6 @@ async function exists(path) {
 async function cacheAPI(apiVersion) {
   let url = (apiVersion === 'v1') ? '/api/v1' : `/apis/${apiVersion}`
   let res = await fetch(url)
-  console.log("APIS response:", res.status)
   if (res.status == 200) {
     let body = await res.json()
     groupVersions[apiVersion] = body
@@ -112,7 +110,8 @@ function deploymentList(m) {
       } else if (r.status === false) {
         badge = `<span class="badge bg-success">not applied</span>`        
       }
-      html += `<li class="list-group-item">${r.path} ${badge}</li>`
+      html += `<li class="list-group-item"><small>
+        <a href="${r.path}" target="_blank">${r.path}</a> ${badge}</small></li>`
     }
     div.innerHTML = html + '</ul>'
   }
@@ -126,9 +125,9 @@ function resourcesBadge(m) {
     }
   }
   if (c == m.resources.length) {
-    return `<span class="badge bg-success">installed (${m.resources.length})</span>`
+    return `<span class="badge bg-success">${c} / ${m.resources.length}</span>`
   }
-  return `<span class="badge bg-secondary">(${c}/${m.resources.length})</span>`
+  return `<span class="badge bg-secondary">${c} / ${m.resources.length}</span>`
 }
 function crBadge(m) {
   if (m.cr.status) {
@@ -168,7 +167,7 @@ function moduleCard(m) {
   let html = `<h5>${m.name}</h5>
     <small>
     deployment: <b>${m.deploymentYaml}</b> ${resourcesBadge(m)}<br/>
-    cr: <a href="${m.cr.path}"><b>${m.crYaml}</b></a> ${crBadge(m)}<br/></small>`
+    cr: <a href="${m.cr.path}" target="_blank"><b>${m.crYaml}</b></a> ${crBadge(m)}<br/><hr></small>`
   txt.innerHTML = html
   cardBody.appendChild(txt)
   cardBody.appendChild(buttons)
