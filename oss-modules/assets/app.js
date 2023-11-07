@@ -141,11 +141,6 @@ function crBadge(m) {
   }
   return `<span class="badge bg-secondary"> - </span>`
 }
-function moduleBadge(m){
-  if (m.community) {
-    return
-  }
-}
 function moduleCard(m) {
   let buttons = document.createElement("div")
   let installBtn = document.createElement("button")
@@ -153,7 +148,7 @@ function moduleCard(m) {
   installBtn.setAttribute('class', 'btn btn-outline-primary')
   installBtn.addEventListener("click", function (event) {
     applyModule(m)
-    checkStatus()
+    setTimeout(()=>checkStatus(),3000)    
   })
   let detailsBtn = document.createElement("button")
   detailsBtn.textContent = (m.details) ? "hide details" : "show details"
@@ -168,8 +163,7 @@ function moduleCard(m) {
   card.setAttribute('class', 'card')
   let cardBody = document.createElement('div')
   cardBody.setAttribute('class', 'card-body')
-  let txt = document.createElement("div")
-  
+  let txt = document.createElement("div")  
   let html = `<h5>${m.name} </h5>
     <small>
     deployment: <b>${m.deploymentYaml}</b> ${resourcesBadge(m)}<br/>
@@ -231,10 +225,16 @@ function checkStatus() {
   for (let m of modules) {
     resPath(m.cr.resource).then((p) => {
       m.cr.path = p
-      return fetch(p)
+      if (p) {
+        return fetch(p)
+      }
+      return null
     }).then((res) => {
-      m.cr.status = (res.status == 200)
-      return m.cr.status ? res.json() : null
+      if (res) {
+        m.cr.status = (res.status == 200)
+        return m.cr.status ? res.json() : null  
+      } 
+      return null
     }
     ).then((body) => {
       m.cr.value = body
@@ -248,9 +248,14 @@ function checkStatus() {
             r.status = true
             return res.json()
           }
+          if (res.status == 404) {
+            console.log(r.path, "not found")
+          }
           return null
         }).then((json) => {
-          r.value = json
+          r.value = json          
+        }).finally(()=>{
+          console.log("rendering")
           renderModules(m)
         })
       }
