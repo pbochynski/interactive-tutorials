@@ -145,14 +145,14 @@ function moduleCard(m) {
   let buttons = document.createElement("div")
   let installBtn = document.createElement("button")
   installBtn.textContent = "install"
-  installBtn.setAttribute('class', 'btn btn-outline-primary')
+  installBtn.setAttribute('class', 'btn btn-outline-primary btn-sm')
   installBtn.addEventListener("click", function (event) {
     applyModule(m)
     setTimeout(()=>checkStatus(),3000)    
   })
   let detailsBtn = document.createElement("button")
   detailsBtn.textContent = (m.details) ? "hide details" : "details"
-  detailsBtn.setAttribute('class', 'btn btn-outline-primary')
+  detailsBtn.setAttribute('class', 'btn btn-outline-primary btn-sm')
   detailsBtn.addEventListener("click", function (event) {
     m.details = !m.details
     renderModules()
