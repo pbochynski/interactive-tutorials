@@ -144,7 +144,7 @@ function crBadge(m) {
 function moduleCard(m) {
   let buttons = document.createElement("div")
   let installBtn = document.createElement("button")
-  installBtn.textContent = "Install " + m.name
+  installBtn.textContent = "install " + m.name
   installBtn.setAttribute('class', 'btn btn-outline-primary')
   installBtn.addEventListener("click", function (event) {
     applyModule(m)
