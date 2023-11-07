@@ -141,6 +141,11 @@ function crBadge(m) {
   }
   return `<span class="badge bg-secondary"> - </span>`
 }
+function moduleBadge(m){
+  if (m.community) {
+    return
+  }
+}
 function moduleCard(m) {
   let buttons = document.createElement("div")
   let installBtn = document.createElement("button")
@@ -164,7 +169,8 @@ function moduleCard(m) {
   let cardBody = document.createElement('div')
   cardBody.setAttribute('class', 'card-body')
   let txt = document.createElement("div")
-  let html = `<h5>${m.name}</h5>
+  
+  let html = `<h5>${m.name} </h5>
     <small>
     deployment: <b>${m.deploymentYaml}</b> ${resourcesBadge(m)}<br/>
     cr: <a href="${m.cr.path}" target="_blank"><b>${m.crYaml}</b></a> ${crBadge(m)}<br/></small><br/>`
