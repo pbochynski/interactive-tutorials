@@ -167,7 +167,7 @@ function moduleCard(m) {
   let html = `<h5>${m.name}</h5>
     <small>
     deployment: <b>${m.deploymentYaml}</b> ${resourcesBadge(m)}<br/>
-    cr: <a href="${m.cr.path}" target="_blank"><b>${m.crYaml}</b></a> ${crBadge(m)}<br/><hr></small>`
+    cr: <a href="${m.cr.path}" target="_blank"><b>${m.crYaml}</b></a> ${crBadge(m)}<br/></small><br/>`
   txt.innerHTML = html
   cardBody.appendChild(txt)
   cardBody.appendChild(buttons)
