@@ -1,1 +1,1 @@
-Open this [link]({{TRAFFIC_HOST1_8001}}/assets)
+Open this [link]({{TRAFFIC_HOST1_8001}}/static/kyma.html)
