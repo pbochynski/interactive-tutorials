@@ -1,51 +1,7 @@
 var pods = []
 var groupVersions = {}
-
-var modules = [
-  {
-    name: 'istio',
-    deploymentYaml: 'istio-manager.yaml',
-    crYaml: 'istio-default-cr.yaml'
-  },
-  {
-    name: 'api-gateway',
-    deploymentYaml: 'api-gateway-manager.yaml',
-    crYaml: 'apigateway-default-cr.yaml'
-  },
-  {
-    name: 'serverless',
-    deploymentYaml: 'serverless-operator.yaml',
-    crYaml: 'default-serverless-cr.yaml'
-  },
-  {
-    name: 'btp-operator',
-    deploymentYaml: 'btp-manager.yaml',
-    crYaml: 'btp-operator-default-cr.yaml'
-  },
-  {
-    name: 'telemetry',
-    deploymentYaml: 'telemetry-manager.yaml',
-    crYaml: 'telemetry-default-cr.yaml'
-  },
-  {
-    name: 'nats',
-    deploymentYaml: 'nats-manager.yaml',
-    crYaml: 'nats_default_cr.yaml'
-  },
-  {
-    name: 'keda',
-    deploymentYaml: 'keda-manager.yaml',
-    crYaml: 'keda-default-cr.yaml'
-  },
-  {
-    name: 'cap-operator',
-    deploymentYaml: 'cap-manager.yaml',
-    crYaml: 'cap-default-cr.yaml',
-    community: true
-  }
-
-]
-
+var channel='https://kyma-project.github.io/community-modules/latest.json'
+var modules=[]
 
 async function apply(res) {
   let path = await resPath(res)
@@ -141,6 +97,12 @@ function crBadge(m) {
   }
   return `<span class="badge bg-secondary"> - </span>`
 }
+function moduleBadge(m) {
+  if (m.community) {
+    return `<span class="badge bg-info text-dark"> community </span>` 
+  }
+  return ''
+}
 function moduleCard(m) {
   let buttons = document.createElement("div")
   let installBtn = document.createElement("button")
@@ -166,10 +128,10 @@ function moduleCard(m) {
   let cardBody = document.createElement('div')
   cardBody.setAttribute('class', 'card-body')
   let txt = document.createElement("div")  
-  let html = `<h5>${m.name} </h5>
+  let html = `<h5>${m.name} ${moduleBadge(m)}</h5>
     <small>
-    deployment: <b>${m.deploymentYaml}</b> ${resourcesBadge(m)}<br/>
-    cr: <a href="${m.cr.path}" target="_blank"><b>${m.crYaml}</b></a> ${crBadge(m)}<br/></small><br/>`
+    <a href="${m.deploymentYaml}" target="_blank">deployment YAML</a> ${resourcesBadge(m)}<br/>
+    <a href="${m.cr.path}" target="_blank">configuration CR</a> ${crBadge(m)}<br/></small><br/>`
   txt.innerHTML = html
   cardBody.appendChild(txt)
   cardBody.appendChild(buttons)
@@ -197,21 +159,11 @@ function renderModules(m) {
   }
 }
 
-async function loadModules() {
+async function loadChannel() {
+  let res = await fetch(channel)
+  let json = await res.json()
+  modules=json
   for (let m of modules) {
-    let url = '/assets/modules/' + m.deploymentYaml
-    let response = await fetch(url)
-    let body = await response.text()
-    m.resources = []
-    jsyaml.loadAll(body, (doc) => {
-      m.resources.push({ resource: doc })
-    });
-
-    url = '/assets/modules/' + m.crYaml
-    response = await fetch(url)
-    body = await response.text()
-    m.cr = { resource: jsyaml.load(body) }
-    m.cr.resource.metadata.namespace='kyma-system'
     let crPath = await resPath(m.cr.resource)
     m.cr.path = crPath
 
@@ -219,8 +171,8 @@ async function loadModules() {
       let path = await resPath(i.resource)
       i.path = path
     }
+    renderModules()
   }
-  renderModules()
   checkStatus()
 }
 
@@ -289,4 +241,5 @@ function renderPods() {
   document.getElementById('pods').innerHTML = html
 
 }
-loadModules()
+
+loadChannel()
