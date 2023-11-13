@@ -5,20 +5,12 @@ kubectl create ns kyma-system
 
 Install serverless manager:
 ```
-kubectl apply -f https://github.com/kyma-project/serverless-manager/releases/latest/download/serverless-manager.yaml
+kubectl apply -f https://github.com/kyma-project/serverless-manager/releases/latest/download/serverless-operator.yaml
 ```{{exec}}
 
-And create serverless instance:
+And create serverless instance with default configuration:
 ```
-cat <<EOF | kubectl apply -n kyma-system -f -
-apiVersion: operator.kyma-project.io/v1alpha1
-kind: Serverless
-metadata:
-  name: serverless-sample
-spec:
-  dockerRegistry:
-    enableInternal: true
-EOF
+kubectl apply -f https://github.com/kyma-project/serverless-manager/releases/latest/download/default-serverless-cr.yaml
 ```{{exec}}
 
 Check the status of the serverless instance:
@@ -26,9 +18,24 @@ Check the status of the serverless instance:
 kubectl get serverless serverless-sample -n kyma-system -oyaml
 ```{{exec}}
 
-Create sample function that calculates random Fibonacci series:
+Create sample function `Hello World` function 
 ```
-kubectl apply -f https://raw.githubusercontent.com/kwiatekus/serverless-keda-demo/main/demo-app/fibo-fn.yaml
+cat <<EOF | kubectl apply -f -
+apiVersion: serverless.kyma-project.io/v1alpha2
+kind: Function
+metadata:
+  name: hello
+spec:
+  runtime: nodejs18
+  source:
+    inline:
+      source: |
+        module.exports = {
+          main: function(event, context) {
+            return 'Hello World!'
+          }
+        }
+EOF
 ```{{exec}}
 
 Wait for function to be in the Running status:
