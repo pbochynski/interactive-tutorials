@@ -8,10 +8,6 @@
       {
         "title": "Kyma UI",
         "text": "open-ui.md"
-      },
-      {
-        "title": "Connect to cluster from Kyma Dashboard",
-        "text": "setup-access.md"
       }
     ],
     "assets": {
