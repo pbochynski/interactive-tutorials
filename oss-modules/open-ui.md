@@ -1,1 +1,1 @@
-Open this [link]({{TRAFFIC_HOST1_8001}}/static/kyma.html)
+Open this [link]({{TRAFFIC_HOST1_8001}}/kyma.html?api=backend)
