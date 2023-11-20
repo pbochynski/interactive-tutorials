@@ -10,12 +10,12 @@ kubectl apply -f https://github.com/kyma-project/serverless-manager/releases/lat
 
 And create serverless instance with default configuration:
 ```
-kubectl apply -f https://github.com/kyma-project/serverless-manager/releases/latest/download/default-serverless-cr.yaml
+kubectl apply -n kyma-system -f https://github.com/kyma-project/serverless-manager/releases/latest/download/default-serverless-cr.yaml
 ```{{exec}}
 
 Check the status of the serverless instance:
 ```
-kubectl get serverless serverless-sample -n kyma-system -oyaml
+kubectl get serverless default -n kyma-system -oyaml
 ```{{exec}}
 
 Create sample function `Hello World` function 
@@ -35,12 +35,23 @@ spec:
             return 'Hello World!'
           }
         }
+  resourceConfiguration:
+    function:
+      resources:
+        requests:
+          cpu: 100m
+          memory: 100Mi
+    build:
+      resources:
+        requests:
+          cpu: 200m
+          memory: 256Mi
 EOF
 ```{{exec}}
 
 Wait for function to be in the Running status:
 ```
-kubectl wait --for condition=Running  functions/fibo-fn
+kubectl wait --for condition=Running  functions/hello
 ```{{exec}}
 
 Expose the function on port 8080
