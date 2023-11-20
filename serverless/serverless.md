@@ -56,7 +56,7 @@ kubectl wait --for condition=Running  functions/hello
 
 Expose the function on port 8080
 ```
-kubectl port-forward service/fibo-fn 8080:80 --address=0.0.0.0 &
+kubectl port-forward service/hello 8080:80 --address=0.0.0.0 &
 ```{{exec}}
 
 And you can access it from your browser: {{TRAFFIC_HOST1_8080}}
