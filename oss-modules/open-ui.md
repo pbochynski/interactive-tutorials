@@ -1,1 +1,1 @@
-Open this [link]({{TRAFFIC_HOST1_8001}}/index.html?api=backend)
+Open this [{{TRAFFIC_HOST1_8001}}/static/]({{TRAFFIC_HOST1_8001}}/static/)
