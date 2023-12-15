@@ -2,7 +2,7 @@ Open this [link]({{TRAFFIC_HOST1_8001}}/static/)
 
 Or you can deploy kyma-modules-ui in your cluster:
 ```
-kubectl run ui --image=ghcr.io/kyma-project/community-modules:latest
+kubectl run ui --image=ghcr.io/kyma-project/community-modules:main
 ```{{exec}}
 
 Then start `kubectl proxy` command (it is already started in this tutorial)
