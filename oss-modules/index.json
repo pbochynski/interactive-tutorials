@@ -6,8 +6,8 @@
   "details": {
     "steps": [
       {
-        "title": "Kyma UI",
-        "text": "open-ui.md"
+        "title": "Kyma CLI and UI",
+        "text": "cli-ui.md"
       }
     ],
     "assets": {
