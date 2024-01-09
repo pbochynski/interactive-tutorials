@@ -6,7 +6,7 @@ kyma modules
 
 You can install some of them:
 ```
-kyma deploy -m istio api-gateway --defaultConfig
+kyma deploy -m istio api-gateway serverless
 ```{{exec}}
 
 And you can open the UI:
