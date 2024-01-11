@@ -8,6 +8,10 @@
       {
         "title": "Kyma CLI and UI",
         "text": "cli-ui.md"
+      },
+      {
+        "title": "Kyma Dashboard",
+        "text": "setup-access.md"
       }
     ],
     "assets": {
