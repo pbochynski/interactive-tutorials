@@ -4,9 +4,9 @@ Check available kyma modules:
 kyma modules
 ```{{exec}}
 
-You can install some of them:
+Install default modules (istio, api-gateway, btp-operator):
 ```
-kyma deploy -m istio api-gateway serverless
+kyma deploy
 ```{{exec}}
 
 And you can open the UI:
