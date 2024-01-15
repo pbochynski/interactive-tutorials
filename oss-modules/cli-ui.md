@@ -15,5 +15,5 @@ kyma ui
 ```{{exec}}
 
 And access the ui through kubectl proxy:
-[Kyma UI]({{TRAFFIC_HOST1_3000}}?api=backend)
+[Kyma UI]({{TRAFFIC_HOST1_3001}}/modules)
 
