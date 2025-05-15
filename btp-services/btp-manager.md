@@ -34,3 +34,14 @@ Check the status of installation:
 ```
 kubectl get btpoperator -n kyma-system btpoperator
 ```{{exec}}
+
+Wait for btpoperator status.state to be `Ready`:
+```
+kubectl wait --for=condition=Ready --timeout=600s btpoperator -n kyma-system btpoperator
+```{{exec}}
+
+Patch sap-btp-service-operator deployment with custom image:
+```
+kubectl delete deployment -n kyma-system btp-manager-controller-manager
+kubectl patch deployment sap-btp-operator-controller-manager -n kyma-system --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/1/image", "value": "ghcr.io/pbochynski/sap-btp-service-operator/controller:0.7.5-alpha2"}]'
+```{{exec}}

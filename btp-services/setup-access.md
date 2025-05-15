@@ -10,17 +10,17 @@ apiVersion: v1
 clusters:
 - cluster:
     server: {{TRAFFIC_HOST1_8001}}
-  name: kyma-katacoda
+  name: kyma-killerkoda
 contexts:
 - context:
-    cluster: kyma-katacoda
-    user: kubernetes-admin
-  name: kubernetes-admin@kubernetes
-current-context: kubernetes-admin@kubernetes
+    cluster: kyma-killerkoda
+    user: admin
+  name: killerkoda
+current-context: killerkoda
 kind: Config
 preferences: {}
 users:
-- name: kubernetes-admin
+- name: admin
   user:
     token: tokentokentoken
 ```{{copy}}
