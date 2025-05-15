@@ -2,6 +2,10 @@ Login to your BTP account and select the subaccount you want to use:
 ```
 btp set config --format json --target.hierarchy false --login.sso manual
 btp login --url https://cpcli.cf.eu10.hana.ondemand.com --sso manual
+```{{exec}}
+
+Select the subaccount you want to use:
+``` 
 btp target
 ```{{exec}}
 
