@@ -10,10 +10,6 @@
         "text": "setup-btp-cli.md"
       },
       {
-        "title": "Service Manager credentials",
-        "text": "sm-creds.md"
-      },
-      {
         "title": "Install BTP manager",
         "text": "btp-manager.md"
       },
