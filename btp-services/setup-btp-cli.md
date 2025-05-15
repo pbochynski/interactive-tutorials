@@ -3,13 +3,13 @@ Login to your BTP account and select the subaccount you want to use:
 btp set config --format json --target.hierarchy false --login.sso manual
 btp login --url https://cpcli.cf.eu10.hana.ondemand.com --sso manual
 btp target
-SUBACCOUNT_SUBDOMAIN=$(btp get account/subaccount | jq -r '.subdomain')
 ```{{exec}}
 
 Copy the login URL, paste it in another browser window/tab and log in to your BTP account.
 
 After successful login you can find service instance `service-operator-access` with plan `service-operator-access` in your subaccount. If you don't have it, create it with the following command:
 ```
+SUBACCOUNT_SUBDOMAIN=$(btp get account/subaccount | jq -r '.subdomain')
 SM_PLAN=$(btp list services/plan | jq -r '
   ( [ .[] | select(.name=="service-operator-access" and .service_offering_name=="service-manager") | .id ] | .[0] ) // empty
 ')
