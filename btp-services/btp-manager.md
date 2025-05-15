@@ -1,3 +1,25 @@
+And now create kubernetes secret out of it:
+```
+kubectl create ns kyma-system
+cat <<EOF > sap-btp-manager-secret.yaml
+apiVersion: v1
+kind: Secret
+type: Opaque
+metadata:
+  name: sap-btp-manager
+  namespace: kyma-system
+  labels:
+    app.kubernetes.io/managed-by: kcp-kyma-environment-broker
+data:
+  clientid: $(jq --raw-output '.clientid | @base64' creds.json)
+  clientsecret: $(jq --raw-output '.clientsecret | @base64' creds.json)
+  sm_url: $(jq --raw-output '.sm_url | @base64' creds.json)
+  tokenurl: $(jq --raw-output '.url | @base64' creds.json)
+  cluster_id: dGVzdF9jbHVzdGVyX2lk
+EOF
+kubectl apply -f sap-btp-manager-secret.yaml
+```{{exec}}
+
 Install [BTP manager](https://github.com/kyma-project/btp-manager):
 ```
 kubectl apply -f https://github.com/kyma-project/btp-manager/releases/latest/download/btp-manager.yaml
