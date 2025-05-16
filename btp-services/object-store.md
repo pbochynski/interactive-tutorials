@@ -31,16 +31,6 @@ kubectl get serviceinstance s3
 kubectl get servicebinding s3
 ```{{exec}}
 
-
-Install the AWS S3 CLI:
-
-```
-curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-unzip awscliv2.zip >/dev/null 2>&1
-sudo ./aws/install >/dev/null 2>&1
-rm -rf awscliv2.zip
-```{{exec}}
-
 Configure the AWS CLI with the credentials from the service binding:
 
 ```
@@ -61,3 +51,13 @@ Check the content of the S3 bucket:
 ```
 aws s3 ls s3://$BUCKET/
 ```{{exec}}
+
+Delete service instance and binding:
+
+```
+kubectl delete servicebinding s3
+kubectl delete serviceinstance s3
+```{{exec}}
+
+
+Now you can try to list the content of the S3 bucket again, but you should get an error as the credentials are deleted with the service instance and binding. But you can now start this section again and create a new service instance and binding with the same name. The content of the S3 bucket should be restored to the state before the deletion.
