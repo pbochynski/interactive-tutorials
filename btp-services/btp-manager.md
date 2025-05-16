@@ -1,3 +1,8 @@
+Set cluster id:
+```
+export CLUSTER_ID=$(echo -n "killercoda-1" | base64)
+```{{exec}}
+
 And now create kubernetes secret out of it:
 ```
 kubectl create ns kyma-system
@@ -15,7 +20,7 @@ data:
   clientsecret: $(jq --raw-output '.clientsecret | @base64' creds.json)
   sm_url: $(jq --raw-output '.sm_url | @base64' creds.json)
   tokenurl: $(jq --raw-output '.url | @base64' creds.json)
-  cluster_id: dGVzdF9jbHVzdGVyX2lk
+  cluster_id: ${CLUSTER_ID}
 EOF
 kubectl apply -f sap-btp-manager-secret.yaml
 ```{{exec}}
