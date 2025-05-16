@@ -43,5 +43,5 @@ kubectl wait --for=condition=Ready --timeout=600s btpoperator -n kyma-system btp
 Patch sap-btp-service-operator deployment with custom image:
 ```
 kubectl delete deployment -n kyma-system btp-manager-controller-manager
-kubectl patch deployment sap-btp-operator-controller-manager -n kyma-system --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/1/image", "value": "ghcr.io/pbochynski/sap-btp-service-operator/controller:0.7.5-alpha2"}]'
+kubectl patch deployment sap-btp-operator-controller-manager -n kyma-system --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/1/image", "value": "ghcr.io/pbochynski/sap-btp-service-operator/controller:0.7.5-alpha3"}]'
 ```{{exec}}
