@@ -25,7 +25,7 @@ SOA_INSTANCE=$(btp list service/instance | jq --arg plan_id_var "$SM_PLAN" -r '(
 if [ -z "$SOA_INSTANCE" ]; then
   echo "Service instance 'service-operator-access' with plan ID '$SM_PLAN' not found. Creating..."
   btp create service/instance --name service-operator-access --plan-name service-operator-access --offering-name service-manager
-  SOA_INSTANCE=$(btp list service/instance | jq --arg plan_id_var "$SM_PLAN" -r '( [ .[] | select(.service_plan_id == $plan_id_var) | .id ] | .[0] )' // empty)
+  SOA_INSTANCE=$(btp list service/instance | jq --arg plan_id_var "$SM_PLAN" -r '( [ .[] | select(.service_plan_id == $plan_id_var) | .id ] | .[0] ) // empty')
   if [ -z "$SOA_INSTANCE" ]; then
     echo "Error: Failed to get service instance ID after creation."
     exit 1
