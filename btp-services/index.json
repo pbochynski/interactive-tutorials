@@ -14,6 +14,10 @@
         "text": "btp-manager.md"
       },
       {
+        "title": "Use object store service",
+        "text": "object-store.md"
+      },
+      {
         "title": "kubeconfig for Kyma Dashboard",
         "text": "setup-access.md"
       }
