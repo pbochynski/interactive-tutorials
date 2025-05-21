@@ -1,6 +1,7 @@
 Set cluster id:
 ```
-export CLUSTER_ID=$(echo -n "killercoda-1" | base64)
+export CLUSTER_ID=killercoda-1
+export CLUSTER_ID_BASE64=$(echo -n $CLUSTER_ID | base64)
 ```{{exec}}
 
 And now create kubernetes secret out of it:
@@ -20,7 +21,7 @@ data:
   clientsecret: $(jq --raw-output '.clientsecret | @base64' creds.json)
   sm_url: $(jq --raw-output '.sm_url | @base64' creds.json)
   tokenurl: $(jq --raw-output '.url | @base64' creds.json)
-  cluster_id: ${CLUSTER_ID}
+  cluster_id: ${CLUSTER_ID_BASE64} 
 EOF
 kubectl apply -f sap-btp-manager-secret.yaml
 ```{{exec}}
