@@ -20,6 +20,7 @@ metadata:
 spec:
   serviceInstanceName: s3
   secretName: s3
+  externalName: s3-${CLUSTER_ID}
 EOF
 ```{{exec}}
 
