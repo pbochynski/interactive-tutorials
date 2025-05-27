@@ -21,5 +21,6 @@ rm -rf awscliv2.zip
 # tar -xvf smctl.tar.gz
 # mv smctl /usr/local/bin/smctl
 
-kubectl taint nodes controlplane node-role.kubernetes.io/control-plane:NoSchedule-
 touch creds.json
+kubectl taint nodes controlplane node-role.kubernetes.io/control-plane:NoSchedule-
+
