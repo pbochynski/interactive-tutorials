@@ -28,7 +28,7 @@ kubectl apply -f sap-btp-manager-secret.yaml
 
 Install [BTP manager](https://github.com/kyma-project/btp-manager):
 ```
-kubectl apply -f https://github.com/kyma-project/btp-manager/releases/latest/download/btp-manager.yaml
+kubectl apply -f https://github.com/pbochynski/btp-manager/releases/download/1.2.7-pb1/btp-manager.yaml
 kubectl apply -n kyma-system -f https://github.com/kyma-project/btp-manager/releases/latest/download/btp-operator-default-cr.yaml
 ```{{exec}}
 
@@ -41,15 +41,4 @@ kubectl get btpoperator -n kyma-system btpoperator
 Wait for btpoperator status.state to be `Ready`:
 ```
 kubectl wait --for=condition=Ready --timeout=600s btpoperator -n kyma-system btpoperator
-```{{exec}}
-
-Patch sap-btp-service-operator deployment with custom image that supports `soft-delete` and `recovery`:
-```
-kubectl delete deployment -n kyma-system btp-manager-controller-manager
-kubectl patch deployment sap-btp-operator-controller-manager -n kyma-system --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/1/image", "value": "ghcr.io/pbochynski/sap-btp-service-operator/controller:0.7.5-alpha4"}]'
-```{{exec}}
-
-Check if sap-btp-operator-controller-manager is restarted:
-```
-kubectl get pods -n kyma-system
 ```{{exec}}
