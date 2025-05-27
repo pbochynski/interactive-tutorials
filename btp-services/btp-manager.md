@@ -1,6 +1,6 @@
-Set cluster id:
+Set cluster id to some generated value using `uuidgen` and base64 encode it. You can also use existing cluster id.
 ```
-export CLUSTER_ID=killercoda-1
+export CLUSTER_ID=$(uuidgen)
 export CLUSTER_ID_BASE64=$(echo -n $CLUSTER_ID | base64)
 ```{{exec}}
 
